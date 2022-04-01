@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -21,6 +22,13 @@ func main() {
 
 	router.HandleFunc("/test", test)
 	router.HandleFunc("/testres", testres)
+
+	cors := handlers.CORS(
+		handlers.AllowedHeaders([]string{"content-type"}),
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowCredentials(),
+	)
+	router.Use(cors)
 
 	http.ListenAndServe(":7500", router)
 }
